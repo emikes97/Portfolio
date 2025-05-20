@@ -21,16 +21,19 @@ class YTDLPWrapper:
         if self.audio_only:
             opts.update({
                 "format": "bestaudio/best",
-                "postprocess": [{
+                "postprocessors": [{
                     "key": "FFmpegExtractAudio",
-                    "preferredcodec": self.audio_only,
+                    "preferredcodec": self.audio_format,  # Correct: pass the actual format (e.g., 'mp3', 'wav')
                     "preferredquality": "192"
                 }]
             })
         else:
             opts.update({
                 "format": "bestvideo+bestaudio/best",
-                "merge_output_format": "mp4"
+                "merge_output_format": "mp4",
+                "postprocessor_args": {
+                    "ffmpeg": ["-c:v", "copy", "-c:a", "aac", "-b:a", "192k"]
+                }
             })
 
         return opts

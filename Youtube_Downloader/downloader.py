@@ -9,3 +9,8 @@ class Downloader:
         self.wrapper.audio_format = audio_format
         self.wrapper.audio_only = True
         return self.wrapper.download(url)
+
+    def download_video(self, url, path):
+        self.wrapper.output_path = path
+        self.wrapper.audio_only = False
+        return self.wrapper.download(url)

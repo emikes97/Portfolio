@@ -45,6 +45,9 @@ class YtbDownloader:
                 case "Download Audio":
                     self._download_audio(label)
 
+                case "Download Video":
+                    self._download_video(label)
+
                 case "Exit":
                     self._terminate_app()
 
@@ -56,16 +59,25 @@ class YtbDownloader:
         url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Request the URL if function is for download
         function_to_run.download_audio(url, audio_format, self.path)
 
+    def _download_video(self, label):
+        function_to_run = self.program_choices[label]
+        url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Requests the URL if function is for download
+        function_to_run.download_video(url, self.path)
+
     def _terminate_app(self):
         self.app_is_on = False
         print("APP was terminated gracefully")
 
     def dict_constructor(self):
+
         self.program_choices = {
-            "Download Audio": self.download,
-            "Exit": self._terminate_app
-        }  # It will store all the menu options in here
+            "Download Audio": self.download,  # For CLI display only
+            "Download Video": self.download,  # For CLI display only
+            "Exit": self._terminate_app       # For CLI display only
+        }  # Used for CLI menu display in Helper; labels are routed manually in match-case
+
         self.program_choices_helper = {
             "1": "Download Audio",
-            "2": "Exit"
-        }  # Maps the keys for "program_choices" to make it easier for the user to minimize input
+            "2": "Download Video",
+            "3": "Exit"
+        }  # Maps the keys to the actual labels used in match / case
