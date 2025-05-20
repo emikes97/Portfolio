@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Environment folders
+env/
+venv/
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test reports
+*.log
+*.coverage
+
+# Configs
+*.ini
+*.cfg
+
+# Downloads
+downloads/
+
+# Ignore all compiled files in subfolders
+**/__pycache__/
+**/*.py[cod]
