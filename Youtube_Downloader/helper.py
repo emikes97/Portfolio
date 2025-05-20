@@ -79,6 +79,17 @@ class Helper:
                 elif request_input == request_inputs[0] and reason == reasons[1]: # Return the URL
                     choice = input("Provide the URL: ")
                     return choice
+                elif request_input == request_inputs[0] and reason == reasons[2]: # Return audio format
+                    try:
+                        choice = int(input("Provide the audio format: "))
+                        if str(choice) in data_list_choices:
+                            return choice - 1
+                        else:
+                            print("[WARN] Invalid selection. Choose a valid number from the list.")
+                            counter += 1
+                    except ValueError:
+                        print("[WARN] Provide only a valid number. Input was not recognized.")
+                        counter += 1
                 elif request_input == request_inputs[1]: # INT Input # Strict
                     try:
                         choice = int(input("Input: "))
