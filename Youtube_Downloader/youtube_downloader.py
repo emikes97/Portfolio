@@ -32,33 +32,38 @@ class YtbDownloader:
             self.help.display_to_screen(self.display_options[0], self.program_choices) # Display the Options of the APP
             choice = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[0], self.program_choices) # Retrieve the Option
             label = self.help.user_choices(choice, self.program_choices_helper) # Retrieve the label for the function
-            if label == "Exit": # If the label is Exit, we should exit early from the app, therefore a nest will help to call it faster.
-                self.program_choices[label]() # Closes the app gracefully
-            else:
-                if label in self.program_choices and label == "Download Audio":
-                    function_to_run = self.program_choices[label]  # Retrieve the function
-                    self.help.display_to_screen(self.display_options[1], self.media_formats)  # Display the Options of the APP
-                    audio_format_index = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[2], self.media_formats)
-                    audio_format = self.media_formats[audio_format_index].lower()
-                    url = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[1]) # Request the URL if function is for download
-                    print(url)
-                    print(audio_format)
-                    outcome = function_to_run.download_audio(url, audio_format, self.path)
-                    if outcome:
-                        print("Success")
-                    else:
-                        print("Failed")
-                else:
-                    raise ValueError(f"Unexpected Error, {label} wasn't found in the dictionary")
 
-    def terminate_app(self):
+            if not label:
+                print("[WARN]: An action hasn't been chosen")
+                continue
+            elif label not in self.program_choices:
+                print(f"[ERROR]: The label {label} isn't mapped to a function")
+                continue
+
+            match label:
+
+                case "Download Audio":
+                    self._download_audio(label)
+
+                case "Exit":
+                    self._terminate_app()
+
+    def _download_audio(self, label):
+        function_to_run = self.program_choices[label]  # Retrieve the function
+        self.help.display_to_screen(self.display_options[1], self.media_formats)  # Display the Options of the APP
+        audio_format_index = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)
+        audio_format = self.media_formats[audio_format_index].lower()
+        url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Request the URL if function is for download
+        function_to_run.download_audio(url, audio_format, self.path)
+
+    def _terminate_app(self):
         self.app_is_on = False
         print("APP was terminated gracefully")
 
     def dict_constructor(self):
         self.program_choices = {
             "Download Audio": self.download,
-            "Exit": self.terminate_app
+            "Exit": self._terminate_app
         }  # It will store all the menu options in here
         self.program_choices_helper = {
             "1": "Download Audio",

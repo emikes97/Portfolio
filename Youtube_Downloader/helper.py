@@ -79,7 +79,7 @@ class Helper:
                 elif request_input == request_inputs[0] and reason == reasons[1]: # Return the URL
                     choice = input("Provide the URL: ")
                     return choice
-                elif request_input == request_inputs[0] and reason == reasons[2]: # Return audio format
+                elif request_input == request_inputs[1] and reason == reasons[2]: # Return audio format index
                     try:
                         choice = int(input("Provide the audio format: "))
                         if str(choice) in data_list_choices:
