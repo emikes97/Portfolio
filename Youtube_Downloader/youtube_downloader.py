@@ -29,9 +29,7 @@ class YtbDownloader:
     def run(self):
         """Runs the program until user quits himself"""
         while self.app_is_on:
-            self.help.display_to_screen(self.display_options[0], self.program_choices) # Display the Options of the APP
-            choice = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[0], self.program_choices) # Retrieve the Option
-            label = self.help.user_choices(choice, self.program_choices_helper) # Retrieve the label for the function
+            label = self._get_label()
 
             if not label:
                 print("[WARN]: An action hasn't been chosen")
@@ -55,15 +53,13 @@ class YtbDownloader:
                     self._terminate_app()
 
     def _download_audio(self, label):
-        function_to_run = self.program_choices[label]  # Retrieve the function
         self.help.display_to_screen(self.display_options[1], self.media_formats)  # Display the Options of the APP
         audio_format = self._pick_audio_format()
-        url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Request the URL if function is for download
+        function_to_run, url = self._get_func_to_call_and_url(label)
         function_to_run.download_audio(url, audio_format, self.path)
 
     def _download_video(self, label):
-        function_to_run = self.program_choices[label]
-        url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Requests the URL if function is for download
+        function_to_run, url = self._get_func_to_call_and_url(label)
         function_to_run.download_video(url, self.path)
 
     def _queued_download(self, label):
@@ -93,6 +89,18 @@ class YtbDownloader:
         audio_format_index = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)
         audio_format = self.media_formats[audio_format_index].lower()
         return audio_format
+
+    def _get_func_to_call_and_url(self, label):
+        function_to_run = self.program_choices[label]  # Retrieve the function
+        url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Request the URL if function is for download
+        return function_to_run, url
+
+    def _get_label(self):
+        self.help.display_to_screen(self.display_options[0], self.program_choices)  # Display the Options of the APP
+        choice = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[0],self.program_choices)  # Retrieve the Option
+        label = self.help.user_choices(choice, self.program_choices_helper)  # Retrieve the label for the function
+
+        return label
 
     def dict_constructor(self):
 
