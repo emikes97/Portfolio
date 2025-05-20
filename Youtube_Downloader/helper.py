@@ -47,21 +47,21 @@ class Helper:
         1) APP_FUNC,
         2) URL,
         3) AUDIO_FORMAT
-        4)
+        4) INTEGER
 
         Variable 3:
         The data list we want to choose from, it's used to validate our inputs as in some cases we want to remove writing,
         and pressing only 1, 2, 3, 4 from the user as string to streamline choosing and have less writing for the CLI version.
         """
 
-        reasons = ["APP_FUNC", "URL", "AUDIO_FORMAT"] # If you want to add more reasons, add them here and also in main script
+        reasons = ["APP_FUNC", "URL", "AUDIO_FORMAT", "INTEGER"] # If you want to add more reasons, add them here and also in main script
         request_inputs = ["STRING", "INT"] # If you want more inputs add them here and also in main script for easier use.
 
         threshold = 5 # Change the threshold if you want more retries before aborting the process.
         counter = 0 # A counter to abort the choosing if exceeds the threshold of failed attempts from the user
         data_list_choices = [] # An empty list to be provided with the intended range of choices
 
-        if data_list is None and reason not in ["URL", "AUDIO_FORMAT"]:
+        if data_list is None and reason not in ["URL", "AUDIO_FORMAT", "INTEGER"]:
             raise ValueError("The data set you provided is empty or non-existent")
         else:
             if data_list is None:

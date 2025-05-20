@@ -48,6 +48,9 @@ class YtbDownloader:
                 case "Download Video":
                     self._download_video(label)
 
+                case ("Multiple Downloads (Audio)" | "Multiple Downloads (Videos)"):
+                    self._queued_download(label)
+
                 case "Exit":
                     self._terminate_app()
 
@@ -75,10 +78,10 @@ class YtbDownloader:
         match label:
 
             case "Multiple Downloads (Audio)":
-                pass
+                self.download.multiple_downloads(queue, self.path, audio_only=True)
 
             case "Multiple Downloads (Videos)":
-                pass
+                self.download.multiple_downloads(queue, self.path, audio_only=False)
 
     def _terminate_app(self):
         self.app_is_on = False
