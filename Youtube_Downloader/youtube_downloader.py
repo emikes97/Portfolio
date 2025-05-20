@@ -57,8 +57,7 @@ class YtbDownloader:
     def _download_audio(self, label):
         function_to_run = self.program_choices[label]  # Retrieve the function
         self.help.display_to_screen(self.display_options[1], self.media_formats)  # Display the Options of the APP
-        audio_format_index = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)
-        audio_format = self.media_formats[audio_format_index].lower()
+        audio_format = self._pick_audio_format()
         url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Request the URL if function is for download
         function_to_run.download_audio(url, audio_format, self.path)
 
@@ -71,6 +70,9 @@ class YtbDownloader:
         queue = []
         videos_to_download = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[3])
 
+        if label == "Multiple Downloads (Audio)":
+            audio_format = self._pick_audio_format()
+
         for i in range(videos_to_download):
             url = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[1])  # Request the URL if function is for download
             queue.append(url)
@@ -78,7 +80,7 @@ class YtbDownloader:
         match label:
 
             case "Multiple Downloads (Audio)":
-                self.download.multiple_downloads(queue, self.path, audio_only=True)
+                self.download.multiple_downloads(queue, self.path, audio_format=audio_format,  audio_only=True)
 
             case "Multiple Downloads (Videos)":
                 self.download.multiple_downloads(queue, self.path, audio_only=False)
@@ -86,6 +88,11 @@ class YtbDownloader:
     def _terminate_app(self):
         self.app_is_on = False
         print("APP was terminated gracefully")
+
+    def _pick_audio_format(self):
+        audio_format_index = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)
+        audio_format = self.media_formats[audio_format_index].lower()
+        return audio_format
 
     def dict_constructor(self):
 

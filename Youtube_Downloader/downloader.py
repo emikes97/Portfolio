@@ -15,9 +15,12 @@ class Downloader:
         self.wrapper.audio_only = False
         return self.wrapper.download(url)
 
-    def multiple_downloads(self, queue, path, audio_only=False):
+    def multiple_downloads(self, queue, path, audio_only=False, audio_format=None):
         self.wrapper.output_path = path
         self.wrapper.audio_only = audio_only
+
+        if audio_format is not None:
+            self.wrapper.audio_format = audio_format
 
         for video in queue:
             self.wrapper.download(video)
