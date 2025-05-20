@@ -45,6 +45,9 @@ class YTDLPWrapper:
         elif d["status"] == "finished":
             print("✅ Download complete.")
 
+    def _load_json_configuration(self):
+        pass
+
     def download(self, url):
         options = self._build_options()
 

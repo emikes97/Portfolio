@@ -1,0 +1,11 @@
+{
+  "outtmpl": "%(title)s.%(ext)s",
+  "quiet": false,
+  "nopplaylist": true,
+  "progress_hooks": "",
+  "format": "bestvideo+bestaudio/best",
+  "merge_output_format": "mp4",
+  "postprocessor_args": {
+      "ffmpeg": ["-c:v", "copy", "-c:a", "aac", "-b:a", "192k"]
+  }
+}

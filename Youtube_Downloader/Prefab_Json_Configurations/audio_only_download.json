@@ -1,0 +1,12 @@
+{
+  "outtmpl": "%(title)s.%(ext)s",
+  "quiet": false,
+  "nopplaylist": true,
+  "progress_hooks": "",
+  "format": "bestaudio/best",
+  "postprocessors": [{
+    "key": "FFmpegExtractAudio",
+    "preferredcodec": "mp3",
+    "preferredquality": "192"
+  }]
+}
