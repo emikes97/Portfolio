@@ -99,5 +99,5 @@ class YtbDownloader:
             "2": "Download Video",
             "3": "Multiple Downloads (Audio)",
             "4": "Multiple Downloads (Videos)",
-            "3": "Exit"
+            "5": "Exit"
         }  # Maps the keys to the actual labels used in match / case
