@@ -1,0 +1,43 @@
+{
+  "coffee": {
+    "machiato":
+    {
+      "water": 30,
+      "coffee": 8,
+      "milk": 20
+    },
+    "cappuccino":
+    {
+      "water": 30,
+      "coffee": 8,
+      "milk": 150
+    },
+    "espresso":
+    {
+      "water": 30,
+      "coffee": 8
+    },
+    "double espresso":
+    {
+      "water": 60,
+      "coffee": 16
+    }
+  },
+  "soda": [
+    "coca cola",
+    "sprite",
+    "red bull"
+  ],
+  "chips": [
+    "lays oregano",
+    "lays paprika",
+    "lays salt",
+    "cheetos",
+    "fish sticks"
+  ],
+  "chocolate": [
+    "lacta",
+    "lacta caramel",
+    "lacta strawberry"
+  ]
+}

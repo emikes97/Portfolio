@@ -1,0 +1,12 @@
+{
+  "coins": {
+    "half-euro": 0,
+    "euro": 0,
+    "two-euro": 0
+  },
+  "bills": {
+    "five-euro-bill": 0,
+    "ten-euro-bill": 0
+  },
+  "total-money": 0.0
+}

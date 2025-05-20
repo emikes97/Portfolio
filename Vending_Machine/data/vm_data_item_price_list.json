@@ -1,0 +1,25 @@
+{
+  "coffee": {
+    "machiato": 3.5,
+    "cappuccino": 3.5,
+    "espresso": 3.5,
+    "double espresso": 3.5
+  },
+  "soda": {
+    "coca cola": 3.5,
+    "sprite": 3.5,
+    "red bull": 3.5
+  },
+  "chips": {
+    "lays oregano": 3.5,
+    "lays paprika": 3.5,
+    "lays salt": 3.5,
+    "cheetos": 3.5,
+    "fish sticks": 3.5
+  },
+  "chocolate": {
+    "lacta": 3.5,
+    "lacta caramel": 3.5,
+    "lacta strawberry": 3.5
+  }
+}
