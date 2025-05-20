@@ -1,8 +1,7 @@
 {
   "outtmpl": "%(title)s.%(ext)s",
-  "noplaylist": true,
   "quiet": false,
-  "nopplaylist": true,
+  "noplaylist": true,
   "progress_hooks": "",
   "format": "bestaudio/best",
   "postprocessors": [{
