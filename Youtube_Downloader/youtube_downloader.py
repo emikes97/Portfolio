@@ -7,13 +7,13 @@ class YtbDownloader:
     def __init__(self):
         """Iniatializing everything that is needed for the program to function. Should be kept simple"""
         self.program_choices = {}  # It will store all the menu options in here
-        self.program_choices_helper = {}  # Maps the keys for "program_choices" to make it easier for the user to minimize input
+        self.program_choices_helper = {}  # Maps the labels to the numbers, easier input / less writing for user.
 
         # Lists
         self.media_formats = ["MP3", "WAV", "FLAC", "AAC", "OGG"] # Media Format Options
         self.display_options = ["DISPLAY_OPT", "DISPLAY_MED"] # Display Options
         self.request_input = ["STRING", "INT"]
-        self.reason_to_pass = ["APP_FUNC", "URL", "AUDIO_FORMAT"]
+        self.reason_to_pass = ["APP_FUNC", "URL", "AUDIO_FORMAT", "INTEGER"]
 
         # Controllers / Helpers
         self.help = Helper()
@@ -64,6 +64,22 @@ class YtbDownloader:
         url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Requests the URL if function is for download
         function_to_run.download_video(url, self.path)
 
+    def _queued_download(self, label):
+        queue = []
+        videos_to_download = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[3])
+
+        for i in range(videos_to_download):
+            url = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[1])  # Request the URL if function is for download
+            queue.append(url)
+
+        match label:
+
+            case "Multiple Downloads (Audio)":
+                pass
+
+            case "Multiple Downloads (Videos)":
+                pass
+
     def _terminate_app(self):
         self.app_is_on = False
         print("APP was terminated gracefully")
@@ -73,11 +89,15 @@ class YtbDownloader:
         self.program_choices = {
             "Download Audio": self.download,  # For CLI display only
             "Download Video": self.download,  # For CLI display only
+            "Multiple Downloads (Audio)": self.download,  # For CLI display only
+            "Multiple Downloads (Videos)": self.download,  # For CLI display only
             "Exit": self._terminate_app       # For CLI display only
         }  # Used for CLI menu display in Helper; labels are routed manually in match-case
 
         self.program_choices_helper = {
             "1": "Download Audio",
             "2": "Download Video",
+            "3": "Multiple Downloads (Audio)",
+            "4": "Multiple Downloads (Videos)",
             "3": "Exit"
         }  # Maps the keys to the actual labels used in match / case

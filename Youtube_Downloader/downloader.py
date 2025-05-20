@@ -14,3 +14,7 @@ class Downloader:
         self.wrapper.output_path = path
         self.wrapper.audio_only = False
         return self.wrapper.download(url)
+
+    def multiple_downloads(self, queue, path):
+        self.wrapper.output_path = path
+

@@ -47,6 +47,7 @@ class Helper:
         1) APP_FUNC,
         2) URL,
         3) AUDIO_FORMAT
+        4)
 
         Variable 3:
         The data list we want to choose from, it's used to validate our inputs as in some cases we want to remove writing,
@@ -71,15 +72,15 @@ class Helper:
 
         if reason in reasons and request_input in request_inputs:
             while counter <= threshold:
-                if request_input == request_inputs[0] and reason == reasons[0]: # String Input # Strict # Return index for function
+                if request_input == request_inputs[0] and reason == reasons[0]:  # String Input # Strict # Return index for function
                     choice = input("Input: ")
                     if choice in data_list_choices:
                         return choice
                     counter += 1
-                elif request_input == request_inputs[0] and reason == reasons[1]: # Return the URL
+                elif request_input == request_inputs[0] and reason == reasons[1]:  # Return the URL
                     choice = input("Provide the URL: ")
                     return choice
-                elif request_input == request_inputs[1] and reason == reasons[2]: # Return audio format index
+                elif request_input == request_inputs[1] and reason == reasons[2]:  # Return audio format index
                     try:
                         choice = int(input("Provide the audio format: "))
                         if str(choice) in data_list_choices:
@@ -90,7 +91,7 @@ class Helper:
                     except ValueError:
                         print("[WARN] Provide only a valid number. Input was not recognized.")
                         counter += 1
-                elif request_input == request_inputs[1]: # INT Input # Strict
+                elif request_input == request_inputs[1] and reason == "INTEGER":  # INT Input # Strict
                     try:
                         choice = int(input("Input: "))
                         if isinstance(choice, int):
@@ -99,8 +100,8 @@ class Helper:
                         print("Invalid Input, kindly provide an Integer as requested")
                         counter += 1
                 else:
-                    return None # Abort download  // Unexpected error // Should fail silently and retry
+                    return None  # Abort download  // Unexpected error // Should fail silently and retry
             print("Maximum retries reached, download will be aborted")
-            return None # Abort download // Threshold reached // fail silently
+            return None  # Abort download // Threshold reached // fail silently
         else:
             raise ValueError(f"{reason} may not be included in {reasons} or {request_input} may not be included in {request_inputs}")
