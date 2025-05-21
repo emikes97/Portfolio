@@ -9,6 +9,10 @@ SAVE_PATH_CONFIG_VIDEO = Path(__file__).parent / "Prefab_Json_Configurations"
 class Options:
 
     def __init__(self, helper):
+        # Configs
+        self.audio_config = None
+        self.video_config = None
+
         # Controllers
         self.runner = True
         self.help = helper
@@ -16,40 +20,87 @@ class Options:
         # Dictionaries
         self.options_list = {}
         self.options_list_helper = {}
+        self.show_configs = {}
+        self.show_configs_helper = {}
+        self.change_audio = {}
+        self.change_audio_helper = {}
+        self.change_video = {}
+        self.change_video_helper = {}
 
-        #constructors
+        # Constructors
         self._dict_constructor()
 
     def run_options_menu(self):
 
         while self.runner:
 
-            label = self._get_label()
+            label = self._get_label(self.options_list, self.options_list_helper)
 
             match label:
 
                 case "Show Active Configuration (Audio | Video)":
-                    pass
+                    self._show_active_config()
 
                 case "Change Audio Configuration":
-                    pass
+                    self._change_audio_config()
 
                 case "Change Video Configuration":
-                    pass
+                    self._change_audio_config()
 
                 case "Load Saved Configuration":
-                    pass
+                    self._load_saved_configuration()
 
                 case "Save Active Configuration":
-                    pass
+                    self._save_config()
 
                 case "Exit Options":
-                    pass
+                    self._exit_options()
+
     def _show_active_config(self):
-        pass
+        label = self._get_label(self.show_configs, self.show_configs_helper)
+
+        match label:
+
+            case "Show Audio Config":
+                print("🎧 Current Audio Config:\n")
+                print(json.dumps(self.audio_config, indent=4))
+
+                return
+
+            case "Show Video Config":
+                print("🎥 Current Video Config:\n")
+                print(json.dumps(self.video_config, indent=4))
+
+                return
+
+            case "Show Both Config":
+                print("🎧 Current Audio Config:\n")
+                print(json.dumps(self.audio_config, indent=4))
+                print("\n" + "="*40 + "\n")
+                print("🎥 Current Video Config:\n")
+                print(json.dumps(self.video_config, indent=4))
+
+                return
+
+            case "Back":
+                return
 
     def _change_audio_config(self):
-        pass
+        media_formats = ["MP3", "WAV", "FLAC", "AAC", "OGG"]  # Media Format Options
+        bit_rate = ["128", "192", "256", "320"] # Quality
+        changes_happened = False
+
+        while True:
+
+            label = self._get_label(self.change_audio, self.change_audio_helper)
+
+            match label:
+
+                case "Audio Format":
+                    pass
+
+                case "Bit Rate":
+                    pass
 
     def _change_video_config(self):
         pass
@@ -64,10 +115,10 @@ class Options:
         self.runner = False
         return
 
-    def _get_label(self):
-        self.help.display_to_screen(self.display_options[0], self.options_list)  # Display the Options of the APP
-        choice = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[0],self.options_list)  # Retrieve the Option
-        label = self.help.user_choices(choice, self.program_choices_helper)  # Retrieve the label for the function
+    def _get_label(self, list_to_pass, helper):
+        self.help.display_to_screen(self.display_options[0], list_to_pass)  # Display the Options of the APP
+        choice = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[0],list_to_pass)  # Retrieve the Option
+        label = self.help.user_choices(choice, helper)  # Retrieve the label for the function
         return label
 
     def _dict_constructor(self):
@@ -90,4 +141,35 @@ class Options:
             "5": "Save Active Configuration",
             "6": "Exit Options"
         }
+
+        self.show_configs = {
+            "Show Audio Config": None,
+            "Show Video Config": None,
+            "Show Both Config": None,
+            "Back": None
+        }
+
+        self.show_configs_helper = {
+            "1": "Show Audio Config",
+            "2": "Show Video Config",
+            "3": "Show Both Config",
+            "4": "Back"
+        }
+
+        self.change_audio = {
+            "Audio Format": None,
+            "Bit Rate": None
+        }
+
+        self.change_audio_helper = {
+            "1": "Audio Format",
+            "2": "Bit Rate"
+        }
+
+        with open(CONFIG_PATH_VIDEO, "r") as file:
+            self.video_config = json.load(file)
+
+        with open(CONFIG_PATH_AUDIO, "r") as file:
+            self.audio_config = json.load(file)
+
 
