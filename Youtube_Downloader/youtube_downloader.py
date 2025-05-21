@@ -109,6 +109,7 @@ class YtbDownloader:
             "Download Video": self.download,  # For CLI display only
             "Multiple Downloads (Audio)": self.download,  # For CLI display only
             "Multiple Downloads (Videos)": self.download,  # For CLI display only
+            "Options": None,
             "Exit": self._terminate_app       # For CLI display only
         }  # Used for CLI menu display in Helper; labels are routed manually in match-case
 
@@ -117,5 +118,6 @@ class YtbDownloader:
             "2": "Download Video",
             "3": "Multiple Downloads (Audio)",
             "4": "Multiple Downloads (Videos)",
-            "5": "Exit"
+            "5": "Options",
+            "6": "Exit"
         }  # Maps the keys to the actual labels used in match / case
