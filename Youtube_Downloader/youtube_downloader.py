@@ -105,19 +105,16 @@ class YtbDownloader:
     def dict_constructor(self):
 
         self.program_choices = {
-            "Download Audio": self.download,  # For CLI display only
-            "Download Video": self.download,  # For CLI display only
-            "Multiple Downloads (Audio)": self.download,  # For CLI display only
-            "Multiple Downloads (Videos)": self.download,  # For CLI display only
-            "Options": None,
-            "Exit": self._terminate_app       # For CLI display only
-        }  # Used for CLI menu display in Helper; labels are routed manually in match-case
-
-        self.program_choices_helper = {
-            "1": "Download Audio",
-            "2": "Download Video",
-            "3": "Multiple Downloads (Audio)",
-            "4": "Multiple Downloads (Videos)",
-            "5": "Options",
-            "6": "Exit"
-        }  # Maps the keys to the actual labels used in match / case
+            "1": {"label": "Download Audio",
+                  "action": self._download_audio},
+            "2": {"label": "Download Video",
+                  "action": self._download_video},
+            "3": {"label": "Multiple Downloads (Audio)",
+                  "action": self._queued_download},
+            "4": {"label": "Multiple Downloads (Videos)",
+                  "action": self._queued_download},
+            "5": {"label": "Options",
+                  "action": None},
+            "6": {"label": "Exit",
+                  "action": self._terminate_app}
+        }

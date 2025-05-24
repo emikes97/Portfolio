@@ -125,45 +125,38 @@ class Options:
         """"""
 
         self.options_list = {
-            "Show Active Configuration (Audio | Video)": self._show_active_config,
-            "Change Audio Configuration": self._change_audio_config,
-            "Change Video Configuration": self._change_video_config,
-            "Load Saved Configuration": self._load_saved_configuration,
-            "Save Active Configuration": self._save_config,
-            "Exit Options": self._exit_options,
-        }
-
-        self.options_list_helper = {
-            "1": "Show Active Configuration (Audio | Video)",
-            "2": "Change Audio Configuration",
-            "3": "Change Video Configuration",
-            "4": "Load Saved Configuration",
-            "5": "Save Active Configuration",
-            "6": "Exit Options"
+            "1": {"label": "Show Active Configuration (Audio | Video)",
+                  "action": self._show_active_config},
+            "2": {"label": "Change Audio Configuration",
+                  "action": self._change_audio_config},
+            "3": {"label": "Change Video Configuration",
+                  "action": self._change_video_config},
+            "4": {"label": "Load Saved Configuration",
+                  "action": self._load_saved_configuration},
+            "5": {"label": "Save Active Configuratio",
+                  "action": self._save_config},
+            "6": {"label": "Exit Options",
+                  "action": self._exit_options}
         }
 
         self.show_configs = {
-            "Show Audio Config": None,
-            "Show Video Config": None,
-            "Show Both Config": None,
-            "Back": None
-        }
-
-        self.show_configs_helper = {
-            "1": "Show Audio Config",
-            "2": "Show Video Config",
-            "3": "Show Both Config",
-            "4": "Back"
+            "1": {"label": "Show Audio Config",
+                  "action": None},
+            "2": {"label": "Show Video Config",
+                  "action": None},
+            "3": {"label": "Show Both Config",
+                  "action": None},
+            "4": {"label": "Back",
+                  "action": None}
         }
 
         self.change_audio = {
-            "Audio Format": None,
-            "Bit Rate": None
-        }
-
-        self.change_audio_helper = {
-            "1": "Audio Format",
-            "2": "Bit Rate"
+            "1": {"label": "Audio Format",
+                  "action": None},
+            "2": {"Label": "Bit Rate",
+                  "action": None},
+            "3": {"Label": "Back",
+                  "action": None}
         }
 
         with open(CONFIG_PATH_VIDEO, "r") as file:
