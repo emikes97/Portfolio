@@ -3,6 +3,8 @@ from pathlib import Path
 
 CONFIG_PATH_AUDIO = Path(__file__).parent / "Active_Configurations" / "audio_only_download.json"
 CONFIG_PATH_VIDEO = Path(__file__).parent / "Active_Configurations" / "video_download_mp4.json"
+CONFIG_PATH_LOAD_AUDIO = Path(__file__).parent / "Prefab_Json_Configurations" / "audio_only_download.json"
+CONFIG_PATH_LOAD_VIDEO = Path(__file__).parent / "Prefab_Json_Configurations" / "video_download_mp4.json"
 SAVE_PATH_CONFIG_AUDIO = Path(__file__).parent / "Prefab_Json_Configurations"
 SAVE_PATH_CONFIG_VIDEO = Path(__file__).parent / "Prefab_Json_Configurations"
 
@@ -27,6 +29,8 @@ class Options:
         self.show_configs = {}
         self.change_audio = {}
         self.change_video = {}
+        self.load_configurations = {}
+        self.save_configurations = {}
 
         # Settings
 
@@ -46,7 +50,7 @@ class Options:
 
         while self.runner:
 
-            label = self._get_label(self.options_list, self.options_list_helper)
+            label = self._get_label(self.options_list, self.options_list)
 
             match label:
 
@@ -57,7 +61,7 @@ class Options:
                     self._change_audio_config()
 
                 case "Change Video Configuration":
-                    self._change_audio_config()
+                    self._change_video_config()
 
                 case "Load Saved Configuration":
                     self._load_saved_configuration()
@@ -69,7 +73,7 @@ class Options:
                     self._exit_options()
 
     def _show_active_config(self):
-        label = self._get_label(self.show_configs, self.show_configs_helper)
+        label = self._get_label(self.show_configs, self.show_configs)
 
         match label:
 
@@ -125,11 +129,8 @@ class Options:
                     changes_happened = True
 
                 case "Back":
+                    self._changes_happened(changes_happened)
                     return
-
-            if changes_happened:
-                # Ask to save them or otherwise it will not be loaded once they try to download a song.
-                pass
 
     def _change_video_config(self):
         changes_happened = False
@@ -141,8 +142,8 @@ class Options:
             match label:
 
                 case "Audio Bit Rate":
-                    self.help.display_to_screen(self.display_options[1], self.media_formats)
-                    audio_format = self.media_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)]
+                    self.help.display_to_screen(self.display_options[1], self.bit_rate)
+                    audio_format = self.bit_rate[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.bit_rate)]
                     for arg in self.video_config.get("postprocessor_args", {}).get("ffmpeg", []):
                         if "-b:a" in arg:
                             index = self.video_config["postprocessor_args"]["ffmpeg"].index("-c:a")
@@ -177,16 +178,70 @@ class Options:
                     print("Video Codec has been successfully changed")
                     changes_happened = True
 
+                case "Back":
+                    self._changes_happened(changes_happened)
+                    return
+
 
     def _load_saved_configuration(self):
-        pass
+
+        while True:
+
+            label = self._get_label(self.load_configurations, self.load_configurations)
+
+            match label:
+
+                case "Load Audio":
+
+                    with open(CONFIG_PATH_LOAD_AUDIO, "r") as file:
+                        self.audio_config = json.load(file)
+
+                case "Load Video":
+
+                    with open(CONFIG_PATH_LOAD_VIDEO, "r") as file:
+                        self.video_config = json.load(file)
+
+                case "Back":
+                    return
+
+            self._changes_happened(True)
+            return
 
     def _save_config(self):
-        pass
+        try:
+
+            with open(CONFIG_PATH_AUDIO, "w", encoding="utf-8") as file:
+                json.dump(self.audio_config, file, indent=4)
+
+            with open(CONFIG_PATH_VIDEO, "w", encoding="utf-8") as file:
+                json.dump(self.video_config, file, indent=4)
+
+            print("[INFO] Active Configurations have been saved successfully.")
+
+        except Exception as e:
+            print(f"[ERROR]: Failed to save configurations: {e}")
 
     def _exit_options(self):
         self.runner = False
         return
+
+    def _changes_happened(self, changes):
+        print("Do you wish to save? Unsaved changes won't carry over to the active options")
+        if changes:
+            label = self._get_label(self.save_configurations, self.save_configurations)
+
+            match label:
+
+                case "Yes":
+                    self._save_config()
+                    changes_happened = False
+                    return
+
+                case "No":
+                    print("[INFO] Unsaved changed remain, if you don't save your changes won't carry over.")
+                    return
+        else:
+            return
 
     def _get_label(self, list_to_pass, helper):
         self.help.display_to_screen(self.display_options[0], list_to_pass)  # Display the Options of the APP
@@ -242,6 +297,22 @@ class Options:
             "4": {"label": "Video Codec",
                   "action": None},
             "5": {"label": "Back",
+                  "action": None}
+        }
+
+        self.load_configurations = {
+            "1": {"label": "Load Audio",
+                  "action": None},
+            "2": {"label": "Load Video",
+                  "action": None},
+            "3": {"label": "Back",
+                  "action": None}
+        }
+
+        self.save_configurations = {
+            "1": {"label": "Yes",
+                  "action": None},
+            "2": {"label": "No",
                   "action": None}
         }
 

@@ -6,10 +6,9 @@ CONFIG_PATH_VIDEO = Path(__file__).parent / "Active_Configurations" / "video_dow
 
 class YTDLPWrapper:
 
-    def __init__(self, output_path="downloads", audio_only=True, audio_format="mp3"):
+    def __init__(self, output_path="downloads", audio_only=True):
         self.output_path = output_path
         self.audio_only = audio_only
-        self.audio_format = audio_format
         os.makedirs(self.output_path, exist_ok=True)
 
     def _build_options(self):
@@ -21,9 +20,6 @@ class YTDLPWrapper:
                     config = json.load(file)
                     config["progress_hooks"] = [self._progress_hook]
                     config["outtmpl"] = os.path.join(self.output_path, "%(title)s.%(ext)s")
-                    for processor in config.get("postprocessors", []):
-                        if processor.get("key") == "FFmpegExtractAudio":
-                            processor["preferredcodec"] = self.audio_format
 
                 return config
 
@@ -35,15 +31,11 @@ class YTDLPWrapper:
 
                 return config
 
-
     def _progress_hook(self, d):
         if d["status"] == "downloading":
             print(f"Downloading: {d['_percent_str']} at {d.get('_speed_str', 'N/A')}")
         elif d["status"] == "finished":
             print("✅ Download complete.")
-
-    def _load_json_configuration(self):
-        pass
 
     def download(self, url):
         options = self._build_options()

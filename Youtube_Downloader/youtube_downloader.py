@@ -1,6 +1,7 @@
 from helper import Helper
 from downloader import Downloader
 from pathlib import Path
+from options_menu import Options
 
 class YtbDownloader:
 
@@ -9,7 +10,6 @@ class YtbDownloader:
         self.program_choices = {}  # It will store all the menu options in here
 
         # Lists
-        self.media_formats = ["MP3", "WAV", "FLAC", "AAC", "OGG"] # Media Format Options
         self.display_options = ["DISPLAY_OPT", "DISPLAY_MED"] # Display Options
         self.request_input = ["STRING", "INT"]
         self.reason_to_pass = ["APP_FUNC", "URL", "AUDIO_FORMAT", "INTEGER"]
@@ -18,6 +18,7 @@ class YtbDownloader:
         self.help = Helper()
         self.download = Downloader()
         self.app_is_on = True
+        self.options = None
 
         # APP Variables
         self.path = Path.home() / "Downloads"
@@ -48,14 +49,16 @@ class YtbDownloader:
                 case ("Multiple Downloads (Audio)" | "Multiple Downloads (Videos)"):
                     self._queued_download(label)
 
+                case "Options":
+                    self.options = Options(self.help, self.display_options, self.request_input, self.reason_to_pass)
+                    self.options.run_options_menu()
+
                 case "Exit":
                     self._terminate_app()
 
     def _download_audio(self, label):
-        self.help.display_to_screen(self.display_options[1], self.media_formats)  # Display the Options of the APP
-        audio_format = self._pick_audio_format()
         function_to_run, url = self._get_func_to_call_and_url(label)
-        function_to_run.download_audio(url, audio_format, self.path)
+        function_to_run.download_audio(url, self.path)
 
     def _download_video(self, label):
         function_to_run, url = self._get_func_to_call_and_url(label)
@@ -65,9 +68,6 @@ class YtbDownloader:
         queue = []
         videos_to_download = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[3])
 
-        if label == "Multiple Downloads (Audio)":
-            audio_format = self._pick_audio_format()
-
         for i in range(videos_to_download):
             url = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[1])  # Request the URL if function is for download
             queue.append(url)
@@ -75,7 +75,7 @@ class YtbDownloader:
         match label:
 
             case "Multiple Downloads (Audio)":
-                self.download.multiple_downloads(queue, self.path, audio_format=audio_format,  audio_only=True)
+                self.download.multiple_downloads(queue, self.path, audio_only=True)
 
             case "Multiple Downloads (Videos)":
                 self.download.multiple_downloads(queue, self.path, audio_only=False)
@@ -83,11 +83,6 @@ class YtbDownloader:
     def _terminate_app(self):
         self.app_is_on = False
         print("APP was terminated gracefully")
-
-    def _pick_audio_format(self):
-        audio_format_index = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)
-        audio_format = self.media_formats[audio_format_index].lower()
-        return audio_format
 
     def _get_func_to_call_and_url(self, label):
         function_to_run = None
