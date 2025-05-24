@@ -28,6 +28,17 @@ class Options:
         self.change_audio = {}
         self.change_video = {}
 
+        # Settings
+
+        # Audio
+        self.media_formats = ["MP3", "WAV", "FLAC", "AAC", "OGG"]  # Media Format Options
+        self.bit_rate = ["128", "192", "256", "320"] # Quality / Can be used for Video too
+
+        # Video
+        self.output_formats = ["mp4", "mkv", "webm"]
+        self.audio_codecs = ["aac", "mp3", "opus", "copy"]
+        self.video_codecs = ["copy", "libx264", "libx265"]
+
         # Constructors
         self._dict_constructor()
 
@@ -87,8 +98,6 @@ class Options:
                 return
 
     def _change_audio_config(self):
-        media_formats = ["MP3", "WAV", "FLAC", "AAC", "OGG"]  # Media Format Options
-        bit_rate = ["128", "192", "256", "320"] # Quality
         changes_happened = False
 
         while True:
@@ -98,8 +107,8 @@ class Options:
             match label:
 
                 case "Audio Format":
-                    self.help.display_to_screen(self.display_options[1], media_formats)
-                    audio_format = media_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], media_formats)]
+                    self.help.display_to_screen(self.display_options[1], self.media_formats)
+                    audio_format = self.media_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)]
                     for processor in self.audio_config.get("postprocessors", []):
                         if processor.get("key") == "FFmpegExtractAudio":
                             processor["preferredcodec"] = audio_format
@@ -107,8 +116,8 @@ class Options:
                     changes_happened = True
 
                 case "Bit Rate":
-                    self.help.display_to_screen(self.display_options[1], bit_rate)
-                    bit_rate_change = bit_rate[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], bit_rate)]
+                    self.help.display_to_screen(self.display_options[1], self.bit_rate)
+                    bit_rate_change = self.bit_rate[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.bit_rate)]
                     for processor in self.audio_config.get("postprocessors", []):
                         if processor.get("key") == "FFmpegExtractAudio":
                             processor["preferredquality"] = bit_rate_change
@@ -123,7 +132,51 @@ class Options:
                 pass
 
     def _change_video_config(self):
-        pass
+        changes_happened = False
+
+        while True:
+
+            label = self._get_label(self.change_video, self.change_video)
+
+            match label:
+
+                case "Audio Bit Rate":
+                    self.help.display_to_screen(self.display_options[1], self.media_formats)
+                    audio_format = self.media_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)]
+                    for arg in self.video_config.get("postprocessor_args", {}).get("ffmpeg", []):
+                        if "-b:a" in arg:
+                            index = self.video_config["postprocessor_args"]["ffmpeg"].index("-c:a")
+                            self.video_config["postprocessor_args"]["ffmpeg"][index+1] = audio_format
+                    print("Audio Format has been successfully changed")
+                    changes_happened = True
+
+                case "Merge Format":
+                    self.help.display_to_screen(self.display_options[1], self.output_formats)
+                    merge_format = self.output_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)]
+                    self.video_config["merge_output_format"] = merge_format
+                    print("Merge Format has been successfully changed")
+                    changes_happened = True
+
+                case "Audio Codec":
+                    self.help.display_to_screen(self.display_options[1], self.audio_codecs)
+                    aud_codex = self.output_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.audio_codecs)]
+                    for arg in self.video_config.get("postprocessor_args", {}).get("ffmpeg", []):
+                        if "-c:a" in arg:
+                            index = self.video_config["postprocessor_args"]["ffmpeg"].index("-c:a")
+                            self.video_config["postprocessor_args"]["ffmpeg"][index+1] = aud_codex
+                    print("Audio Codec has been successfully changed")
+                    changes_happened = True
+
+                case "Video Codec":
+                    self.help.display_to_screen(self.display_options[1], self.video_codecs)
+                    vid_codex = self.output_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.video_codecs)]
+                    for arg in self.video_config.get("postprocessor_args", {}).get("ffmpeg", []):
+                        if "-c:v" in arg:
+                            index = self.video_config["postprocessor_args"]["ffmpeg"].index("-c:v")
+                            self.video_config["postprocessor_args"]["ffmpeg"][index+1] = vid_codex
+                    print("Video Codec has been successfully changed")
+                    changes_happened = True
+
 
     def _load_saved_configuration(self):
         pass
@@ -173,9 +226,22 @@ class Options:
         self.change_audio = {
             "1": {"label": "Audio Format",
                   "action": None},
-            "2": {"Label": "Bit Rate",
+            "2": {"label": "Bit Rate",
                   "action": None},
-            "3": {"Label": "Back",
+            "3": {"label": "Back",
+                  "action": None}
+        }
+
+        self.change_video = {
+            "1": {"label": "Audio Bit Rate",
+                  "action": None},
+            "2": {"label": "Merge Format",
+                  "action": None},
+            "3": {"label": "Audio Codec",
+                  "action": None},
+            "4": {"label": "Video Codec",
+                  "action": None},
+            "5": {"label": "Back",
                   "action": None}
         }
 
