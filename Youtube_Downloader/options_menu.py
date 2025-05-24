@@ -8,7 +8,7 @@ SAVE_PATH_CONFIG_VIDEO = Path(__file__).parent / "Prefab_Json_Configurations"
 
 class Options:
 
-    def __init__(self, helper):
+    def __init__(self, helper, display_options, request_input, reason_to_pass):
         # Configs
         self.audio_config = None
         self.video_config = None
@@ -17,15 +17,16 @@ class Options:
         self.runner = True
         self.help = helper
 
+        # Lists
+        self.display_options = display_options  # ["DISPLAY_OPT", "DISPLAY_MED"]
+        self.request_input = request_input  # ["STRING", "INT"]
+        self.reason_to_pass = reason_to_pass  # ["APP_FUNC", "URL", "AUDIO_FORMAT", "INTEGER"]
+
         # Dictionaries
         self.options_list = {}
-        self.options_list_helper = {}
         self.show_configs = {}
-        self.show_configs_helper = {}
         self.change_audio = {}
-        self.change_audio_helper = {}
         self.change_video = {}
-        self.change_video_helper = {}
 
         # Constructors
         self._dict_constructor()
@@ -92,15 +93,34 @@ class Options:
 
         while True:
 
-            label = self._get_label(self.change_audio, self.change_audio_helper)
+            label = self._get_label(self.change_audio, self.change_audio)
 
             match label:
 
                 case "Audio Format":
-                    pass
+                    self.help.display_to_screen(self.display_options[1], media_formats)
+                    audio_format = media_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], media_formats)]
+                    for processor in self.audio_config.get("postprocessors", []):
+                        if processor.get("key") == "FFmpegExtractAudio":
+                            processor["preferredcodec"] = audio_format
+                    print("Audio Format has been successfully changed")
+                    changes_happened = True
 
                 case "Bit Rate":
-                    pass
+                    self.help.display_to_screen(self.display_options[1], bit_rate)
+                    bit_rate_change = bit_rate[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], bit_rate)]
+                    for processor in self.audio_config.get("postprocessors", []):
+                        if processor.get("key") == "FFmpegExtractAudio":
+                            processor["preferredquality"] = bit_rate_change
+                    print("Bit Rate has been successfully changed")
+                    changes_happened = True
+
+                case "Back":
+                    return
+
+            if changes_happened:
+                # Ask to save them or otherwise it will not be loaded once they try to download a song.
+                pass
 
     def _change_video_config(self):
         pass
@@ -133,7 +153,7 @@ class Options:
                   "action": self._change_video_config},
             "4": {"label": "Load Saved Configuration",
                   "action": self._load_saved_configuration},
-            "5": {"label": "Save Active Configuratio",
+            "5": {"label": "Save Active Configuration",
                   "action": self._save_config},
             "6": {"label": "Exit Options",
                   "action": self._exit_options}

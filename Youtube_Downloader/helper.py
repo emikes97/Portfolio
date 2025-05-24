@@ -103,4 +103,5 @@ class Helper:
                         counter += 1
 
                 case _:
+                    print("[ERROR] Unmatched reason / Input combo")
                     return None  #Unmatched reason/input combo.
