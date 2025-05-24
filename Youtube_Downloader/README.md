@@ -29,3 +29,6 @@ Make sure `ffmpeg` is in your system’s PATH so the program can find it.
 ## ▶️ How to Use
 
 Clone the repo and run the main script:
+
+![image](https://github.com/user-attachments/assets/151f217f-f1ef-49dd-be53-744c08d65289)
+
