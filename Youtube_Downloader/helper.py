@@ -2,10 +2,10 @@ class Helper:
 
     @staticmethod
     def user_choices(user_input, dict_to_check):
-        if user_input in dict_to_check:
-            return dict_to_check[user_input]
-        else:
-            print("You have provided a wrong key.")
+        """Returns the label of the action we want to take, in case it doesn't exist it will return None
+           If it's None, always verify how you have structured your dict keys, a check shouldn't be needed for this
+           method."""
+        return dict_to_check.get(user_input, {}).get("label", None)
 
     @staticmethod
     def display_to_screen(display_type, data_list):
@@ -16,19 +16,22 @@ class Helper:
         """
         options = ["DISPLAY_OPT", "DISPLAY_MED"]
 
-        display = "" # A variable to store anything we need to be shown to the user
+        display = ""  # A variable to store anything we need to be shown to the user
 
-        if display_type in options:
-            if display_type == options[0]:
-                for i, key in enumerate(data_list):
-                    display += f"{i + 1}) {key} \n"
-            elif display_type == options[1]:
+        match display_type:
+
+            case "DISPLAY_OPT":
+                for key, value in data_list.items():
+                    display += f"{key}) {value.get('label', '[WARN] Unknown Label')}\n"
+
+            case "DISPLAY_MED":
                 for i, media_format in enumerate(data_list):
                     display += f"{i + 1}) {media_format} \n"
 
-            print(display)
-        else:
-            raise ValueError("The Display Option you have provided isn't correct.")
+            case _:
+                raise ValueError("The Display Option you have provided isn't correct.")
+
+        print(display)
 
     @staticmethod
     def retrieve_input(request_input, reason, data_list=None):
