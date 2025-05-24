@@ -1,12 +1,15 @@
 import json
+from helper import Helper
 from pathlib import Path
 
-CONFIG_PATH_AUDIO = Path(__file__).parent / "Active_Configurations" / "audio_only_download.json"
-CONFIG_PATH_VIDEO = Path(__file__).parent / "Active_Configurations" / "video_download_mp4.json"
-CONFIG_PATH_LOAD_AUDIO = Path(__file__).parent / "Prefab_Json_Configurations" / "audio_only_download.json"
-CONFIG_PATH_LOAD_VIDEO = Path(__file__).parent / "Prefab_Json_Configurations" / "video_download_mp4.json"
-SAVE_PATH_CONFIG_AUDIO = Path(__file__).parent / "Prefab_Json_Configurations"
-SAVE_PATH_CONFIG_VIDEO = Path(__file__).parent / "Prefab_Json_Configurations"
+CONFIG_PATH_AUDIO = Helper.get_resource_path("Active_Configurations/audio_only_download.json")
+CONFIG_PATH_VIDEO = Helper.get_resource_path("Active_Configurations/video_download_mp4.json")
+
+CONFIG_PATH_LOAD_AUDIO = Helper.get_resource_path("Prefab_Json_Configurations/audio_only_download.json")
+CONFIG_PATH_LOAD_VIDEO = Helper.get_resource_path("Prefab_Json_Configurations/video_download_mp4.json")
+
+SAVE_PATH_CONFIG_AUDIO = Helper.get_resource_path("Prefab_Json_Configurations")
+SAVE_PATH_CONFIG_VIDEO = Helper.get_resource_path("Prefab_Json_Configurations")
 
 class Options:
 

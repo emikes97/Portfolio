@@ -1,15 +1,15 @@
 import os, json, yt_dlp
-from pathlib import Path
+from helper import Helper
 
-CONFIG_PATH_AUDIO = Path(__file__).parent / "Active_Configurations" / "audio_only_download.json"
-CONFIG_PATH_VIDEO = Path(__file__).parent / "Active_Configurations" / "video_download_mp4.json"
+CONFIG_PATH_AUDIO = Helper.get_resource_path("Active_Configurations/audio_only_download.json")
+CONFIG_PATH_VIDEO = Helper.get_resource_path("Active_Configurations/video_download_mp4.json")
 
 class YTDLPWrapper:
 
     def __init__(self, output_path="downloads", audio_only=True):
         self.output_path = output_path
         self.audio_only = audio_only
-        os.makedirs(self.output_path, exist_ok=True)
+        #os.makedirs(self.output_path, exist_ok=True)
 
     def _build_options(self):
 

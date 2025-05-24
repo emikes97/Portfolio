@@ -1,3 +1,6 @@
+from pathlib import Path
+import sys
+
 class Helper:
 
     @staticmethod
@@ -32,6 +35,13 @@ class Helper:
                 raise ValueError("The Display Option you have provided isn't correct.")
 
         print(display)
+
+    @staticmethod
+    def get_resource_path(relative_path: str) -> Path:
+        """Return absolute path to resource, whether running as script or bundled by PyInstaller."""
+        if hasattr(sys, '_MEIPASS'):
+            return Path(sys._MEIPASS) / relative_path
+        return Path(__file__).parent / relative_path
 
     @staticmethod
     def retrieve_input(request_input, reason, data_list=None):
