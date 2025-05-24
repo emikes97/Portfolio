@@ -30,5 +30,6 @@ Make sure `ffmpeg` is in your system’s PATH so the program can find it.
 
 Clone the repo and run the main script:
 
-![image](https://github.com/user-attachments/assets/151f217f-f1ef-49dd-be53-744c08d65289)
+![image](https://github.com/user-attachments/assets/a0605241-4cb3-47c7-a702-4ff529497c56)
+
 
