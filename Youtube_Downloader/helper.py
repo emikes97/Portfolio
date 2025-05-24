@@ -57,9 +57,6 @@ class Helper:
         and pressing only 1, 2, 3, 4 from the user as string to streamline choosing and have less writing for the CLI version.
         """
 
-        reasons = ["APP_FUNC", "URL", "AUDIO_FORMAT", "INTEGER"] # If you want to add more reasons, add them here and also in main script
-        request_inputs = ["STRING", "INT"] # If you want more inputs add them here and also in main script for easier use.
-
         threshold = 5 # Change the threshold if you want more retries before aborting the process.
         counter = 0 # A counter to abort the choosing if exceeds the threshold of failed attempts from the user
         data_list_choices = [] # An empty list to be provided with the intended range of choices
@@ -73,38 +70,37 @@ class Helper:
                 for i, _ in enumerate(data_list):
                     data_list_choices.append(str(i + 1))
 
-        if reason in reasons and request_input in request_inputs:
-            while counter <= threshold:
-                if request_input == request_inputs[0] and reason == reasons[0]:  # String Input # Strict # Return index for function
+        while counter < threshold:
+
+            match (request_input, reason):
+
+                case ("STRING", "APP_FUNC"):
                     choice = input("Input: ")
                     if choice in data_list_choices:
                         return choice
                     counter += 1
-                elif request_input == request_inputs[0] and reason == reasons[1]:  # Return the URL
-                    choice = input("Provide the URL: ")
-                    return choice
-                elif request_input == request_inputs[1] and reason == reasons[2]:  # Return audio format index
+
+                case ("STRING", "URL"):
+                    return input("Provide the URL: ")
+
+                case ("INT", "AUDIO_FORMAT"):
                     try:
-                        choice = int(input("Provide the audio format: "))
+                        choice = int(input("Input: "))
                         if str(choice) in data_list_choices:
                             return choice - 1
                         else:
-                            print("[WARN] Invalid selection. Choose a valid number from the list.")
+                            print("[WARN] Invalid selection. Choose a valid number from the list")
                             counter += 1
                     except ValueError:
-                        print("[WARN] Provide only a valid number. Input was not recognized.")
+                        print("[WARN] provide only a valid number. Input was not recognized.")
                         counter += 1
-                elif request_input == request_inputs[1] and reason == "INTEGER":  # INT Input # Strict
+
+                case ("INT", "INTEGER"):
                     try:
-                        choice = int(input("Input: "))
-                        if isinstance(choice, int):
-                            return choice
+                        return int(input("Input: "))
                     except ValueError:
-                        print("Invalid Input, kindly provide an Integer as requested")
+                        print("[WARN] Invalid Input, kindly provide an Integer as requested")
                         counter += 1
-                else:
-                    return None  # Abort download  // Unexpected error // Should fail silently and retry
-            print("Maximum retries reached, download will be aborted")
-            return None  # Abort download // Threshold reached // fail silently
-        else:
-            raise ValueError(f"{reason} may not be included in {reasons} or {request_input} may not be included in {request_inputs}")
+
+                case _:
+                    return None  #Unmatched reason/input combo.
