@@ -42,4 +42,7 @@ class PaymentProcess:
 
                 amount_used += key_value
 
-        return amount_used, total_given, bank_cash_saved
+        if amount_used >= self.product_price:
+            return True, amount_used, total_given, bank_cash_saved
+        else:
+            return False, amount_used, total_given, bank_cash_saved

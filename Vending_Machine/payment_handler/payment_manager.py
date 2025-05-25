@@ -20,9 +20,6 @@ class VMPaymentProcess:
 
         # Data sets
         self.data_bank = {}
-        self.price_list = {}
-
-        # Data lists
         self.purchase_log = []
 
         # Constructor
@@ -53,26 +50,18 @@ class VMPaymentProcess:
         payment_method = self.payment_method.choose_how_to_pay()
         session = PaymentSession(product_price=product_price, payment_method=payment_method)
         total, payed = session.collect_payment()
-        used_amount, total_given, bank_cash = PaymentProcess(total, payed, product_price).process_payment()
+        success, used_amount, total_given, bank_cash = PaymentProcess(total, payed, product_price).process_payment()
+        if success:
+            pass
+        else:
+            Refund.process(total_given, product_price, failed=True)
+            print("Payment failed, aborting the process.")
+            return success
 
     def return_cost(self, category, item):
         """Checks and returns the price of the chosen product"""
 
         return self.price.return_price(category, item)
-
-    def check_customer_payment(self, total, payment, price_check):
-        """Checks the payment of the customer as a dictionary format, if it fails refund all the money, if it doesn't
-        check how much
-        should be refunded and process the payment.
-        1) total = max amount paid
-        2) payment = a dict of all coins/bills used.
-        3) price_check = the price of the item or items"""
-
-        if total > price_check:
-            payment_completed = self.payment_process(total, payment, price_check)
-            return payment_completed
-        else:
-            self.refund_customer(total, refund=True)
 
 
     def update_bank_file(self):
