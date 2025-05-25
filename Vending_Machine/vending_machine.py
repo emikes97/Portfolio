@@ -1,15 +1,18 @@
 from Vending_Machine.storage.vending_machine_storage import VendingMachineStorage
 from Vending_Machine.ui.vending_text_manager import VendingTextManager
-from Vending_Machine.payment_handler.payment_manager import VMPaymentProcess
+from Vending_Machine.payment_handler.core.payment_manager import VMPaymentManager
+from Vending_Machine.payment_handler.persistence.update_bank_file import BankUpdate
 
 class VendingMachine:
 
     def __init__(self):
+        print("Vending Machine Initializes")
         self.vmstorage = VendingMachineStorage()
         self.vmtext = VendingTextManager(vmstorage=self.vmstorage)
-        self.vmpayment = VMPaymentProcess(self.vmtext)
         self.vending_machine_on = None
+        self.vmpayment = VMPaymentManager(self.vmtext)
         self.vending_machine_choices = []
+        self.vmpayment = None
 
     def run(self):
         self.vmtext.print_message("starting_message")
@@ -23,13 +26,11 @@ class VendingMachine:
             if is_available:
                 product_price = self.vmpayment.return_cost(category,product)
                 self.vmtext.print_message("payment2", price=product_price)
-                method_of_payment = self.vmpayment.choose_how_to_pay()
-                payed, total = self.vmpayment.payment(method_of_payment)
-                successful = self.vmpayment.check_customer_payment(total=total, payment=payed, price_check=product_price)
-                if successful:
-                    print(f"Kindly take your {product}")
+                success = self.vmpayment.payment(product_price, product)
+                if success:
+                    print(f"Take your {product} from the Vending Machine")
                 else:
-                    print(f"Payment Failed")
+                    print("Transaction Failed")
             else:
                 self.vmtext.print_message("alert_2", item=product)
 

@@ -1,4 +1,4 @@
-from denominations import Denominations
+from Vending_Machine.payment_handler.helpers.denominations import Denominations
 
 class PaymentSession:
 

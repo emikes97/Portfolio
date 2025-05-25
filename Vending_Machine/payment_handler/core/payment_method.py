@@ -1,6 +1,7 @@
 class PaymentMethod:
 
     def __init__(self, vmtext):
+        print("Payment Method Initialized")
         self.vmtext = vmtext
 
     def choose_how_to_pay(self):

@@ -1,11 +1,12 @@
 import os, json, sys
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 JSON_ITEM_PRICE = os.path.join(BASE_DIR, "data", "vm_data_item_price_list.json")
 
 class ProductPrice:
 
     def __init__(self):
+        print("Product Price Initializes")
         self.price_list = {}
         self.load_data()
 
@@ -17,7 +18,7 @@ class ProductPrice:
                 self.price_list = json.load(file)
         except FileNotFoundError:
             # send an alert, stop the machine from working.
-            print("❌ Terminating the VM. Critical error: bank file missing.")
+            print("❌ Terminating the VM. Critical error: price list file missing.")
             sys.exit()
 
     def return_price(self, category, item):

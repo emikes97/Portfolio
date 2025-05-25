@@ -1,7 +1,7 @@
 import json
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JSON_STOCK = os.path.join(BASE_DIR, "data", "vm_stock_in_machine_list.json")
 JSON_DATA_ITEM_LIST = os.path.join(BASE_DIR, "data", "vm_data_item_list.json")
 JSON_BACKUP_STOCK = os.path.join(BASE_DIR, "data", "vm_backup_stock.json")
@@ -15,10 +15,10 @@ class VendingMachineStorage:
         self.backup_stock = {}
         self.load_data()
 
-        print(self.backup_stock)
-        print(self.stock_available)
-        print(self.item_list)
-        print(self.categories)
+        # print(self.backup_stock)
+        # print(self.stock_available)
+        # print(self.item_list)
+        # print(self.categories)
 
     def load_data(self):
 

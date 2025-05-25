@@ -1,4 +1,4 @@
-from denominations import Denominations
+from Vending_Machine.payment_handler.helpers.denominations import Denominations
 
 class PaymentProcess:
 
@@ -12,15 +12,17 @@ class PaymentProcess:
     def process_payment(self):
 
         bank_cash_saved = {
-                              "coins": {
-                                "half-euro": 0,
-                                "euro": 0,
-                                "two-euro": 0
-                              },
-                              "bills": {
-                                "five-euro-bill": 0,
-                                "ten-euro-bill": 0
-                              } }
+                          "coins": {
+                            "half-euro": 0,
+                            "euro": 0,
+                            "two-euro": 0
+                          },
+                          "bills": {
+                            "five-euro-bill": 0,
+                            "ten-euro-bill": 0
+                          },
+                          "total-money": 0.0
+        }
 
         amount_used = 0
         total_given = 0
@@ -41,6 +43,8 @@ class PaymentProcess:
                     bank_cash_saved["bills"][key] += 1
 
                 amount_used += key_value
+
+        bank_cash_saved["total-money"] += amount_used
 
         if amount_used >= self.product_price:
             return True, amount_used, total_given, bank_cash_saved
