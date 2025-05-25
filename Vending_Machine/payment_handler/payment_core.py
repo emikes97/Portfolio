@@ -4,15 +4,14 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_BANK_FILE = os.path.join(BASE_DIR, "data_bank", "bank_file.json")
 JSON_PURCHASE_LOG_FILE = os.path.join(BASE_DIR, "data_bank", "purchase_log_file.json")
-JSON_ITEM_PRICE = os.path.join(BASE_DIR, "data", "vm_data_item_price_list.json")
-
 
 class VMPaymentProcess:
 
-    def __init__(self):
+    def __init__(self, vmtext):
         self.data_bank = {}
         self.price_list = {}
         self.purchase_log = []
+        self.vmtext = vmtext
         self.load_data()
 
     def load_data(self):
@@ -21,14 +20,6 @@ class VMPaymentProcess:
         try:
             with open(JSON_BANK_FILE, "r") as file:
                 self.data_bank = json.load(file)
-        except FileNotFoundError:
-            # send an alert, stop the machine from working.
-            print("❌ Terminating the VM. Critical error: bank file missing.")
-            sys.exit()
-
-        try:
-            with open(JSON_ITEM_PRICE, "r") as file:
-                self.price_list = json.load(file)
         except FileNotFoundError:
             # send an alert, stop the machine from working.
             print("❌ Terminating the VM. Critical error: bank file missing.")
@@ -44,7 +35,7 @@ class VMPaymentProcess:
                 json.dump(self.purchase_log, file, indent=4)
             print("⚠️ Purchase log was missing. A new one has been created.")
 
-    def check_price(self, category, item):
+    def return_cost(self, category, item):
         """Checks and returns the price of the chosen product"""
 
         return self.price_list[category][item]
@@ -141,6 +132,22 @@ class VMPaymentProcess:
             type(self).refund_customer(total_given, refund=True)
             return False
 
+    def choose_how_to_pay(self):
+        """A helper function to choose the payment method for the user."""
+
+        payment_method = {
+            "1": "coins",
+            "2": "bills",
+        }
+
+        self.vmtext.print_message("payment")
+        while True:
+            choice = input("Choose: ")
+            if choice in payment_method:
+                return payment_method[choice]
+            else:
+                self.vmtext.print_message("alert5")
+
     def update_bank_file(self):
         """Updates the json file that keeps track of how much money is inside the  machine"""
         pass
@@ -154,54 +161,4 @@ class VMPaymentProcess:
         """Notifies the owner of the purchase made"""
         pass
 
-    @staticmethod
-    def get_denomination_value(key):
-        """A helper function for payment process"""
-        values = {
-            "half-euro": 0.5,
-            "euro": 1.0,
-            "two-euro": 2.0,
-            "five-euro-bill": 5.0,
-            "ten-euro-bill": 10.0,
-        }
 
-        return values.get(key,0)
-
-    @staticmethod
-    def refund_customer(money_to_refund, refund=False):
-        """Method should be called to refund the customer for excessive cash input or for a failed purchase in case the
-        provided cash is less than the required amount"""
-        if not refund:
-            print(f"Kindly take your {money_to_refund} back from the machine.")
-        else:
-            print(f"Kindly take your {money_to_refund} back from the machine."
-                  f"The payment failed due to the money provided being less than the required amount.")
-            # Ejects the money back to the customer if a real VM was used.
-
-    @staticmethod
-    def get_payment_method(method_of_payment):
-        """A helper function to retrieve the payment method and text"""
-        coins_payment = {
-            "1": "half-euro",
-            "2": "euro",
-            "3": "two-euro"
-        }
-        coins_messages = {
-            "type": "Type: '1': Half-Euro, '2' Euro, '3' Two-Euro\n",
-            "quantity": "Provide the quantity: "
-        }
-
-        bills_payment = {
-            "1": "five-euro-bill",
-            "2": "ten-euro-bill"
-        }
-
-        bills_messages = {
-            "type": "Type: '1': Five-euro-bill, '2': Ten-euro-bill\n",
-            "quantity": "Provide the quantity: "
-        }
-
-        if method_of_payment == "coins":
-            return coins_payment, coins_messages
-        else:
-            return bills_payment, bills_messages

@@ -1,13 +1,13 @@
-from vending_machine_storage import VendingMachineStorage
-from vending_text_manager import VendingTextManager
-from vending_machine_payment_process import VMPaymentProcess
+from Vending_Machine.storage.vending_machine_storage import VendingMachineStorage
+from Vending_Machine.ui.vending_text_manager import VendingTextManager
+from Vending_Machine.payment_handler.payment_core import VMPaymentProcess
 
 class VendingMachine:
 
     def __init__(self):
         self.vmstorage = VendingMachineStorage()
         self.vmtext = VendingTextManager(vmstorage=self.vmstorage)
-        self.vmpayment = VMPaymentProcess()
+        self.vmpayment = VMPaymentProcess(self.vmtext)
         self.vending_machine_on = None
         self.vending_machine_choices = []
 
@@ -23,7 +23,7 @@ class VendingMachine:
             if is_available:
                 product_price = self.vmpayment.check_price(category,product)
                 self.vmtext.print_message("payment2", price=product_price)
-                method_of_payment = self.choose_how_to_pay()
+                method_of_payment = self.vmpayment.choose_how_to_pay()
                 payed, total = self.vmpayment.payment(method_of_payment)
                 successful = self.vmpayment.check_customer_payment(total=total, payment=payed, price_check=product_price)
                 if successful:
@@ -47,22 +47,6 @@ class VendingMachine:
                     self.vmtext.print_message("alert_3", item=choice_item)
             else:
                 self.vmtext.print_message("alert_4", category=choice_cat)
-
-    def choose_how_to_pay(self):
-        """A helper function to choose the payment method for the user."""
-
-        payment_method = {
-            "1": "coins",
-            "2": "bills",
-        }
-
-        self.vmtext.print_message("payment")
-        while True:
-            choice = input("Choose: ")
-            if choice in payment_method:
-                return payment_method[choice]
-            else:
-                self.vmtext.print_message("alert5")
 
 
 
