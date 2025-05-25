@@ -1,6 +1,6 @@
 from Vending_Machine.storage.vending_machine_storage import VendingMachineStorage
 from Vending_Machine.ui.vending_text_manager import VendingTextManager
-from Vending_Machine.payment_handler.payment_core import VMPaymentProcess
+from Vending_Machine.payment_handler.payment_manager import VMPaymentProcess
 
 class VendingMachine:
 
@@ -21,7 +21,7 @@ class VendingMachine:
             category, product = self.customer_choice_picker()
             is_available = self.vmstorage.is_available(category, product)
             if is_available:
-                product_price = self.vmpayment.check_price(category,product)
+                product_price = self.vmpayment.return_cost(category,product)
                 self.vmtext.print_message("payment2", price=product_price)
                 method_of_payment = self.vmpayment.choose_how_to_pay()
                 payed, total = self.vmpayment.payment(method_of_payment)

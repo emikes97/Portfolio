@@ -7,7 +7,7 @@ class ProductPrice:
 
     def __init__(self):
         self.price_list = {}
-
+        self.load_data()
 
     def load_data(self):
         """A method to load the required files for the VM to be able to process and log the payments"""
