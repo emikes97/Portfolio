@@ -68,7 +68,7 @@ class VMPaymentProcess:
                 try:
                     quantity = int(input(payment_messages["quantity"]))
                 except ValueError:
-                    return payed
+                    return payed, 0
 
                 if pay not in payed:
                     payed[pay] = quantity
@@ -84,7 +84,8 @@ class VMPaymentProcess:
                         total = 0
                         
                         for key in payed:
-                            total += payed[key]
+                            denomination_value = type(self).get_denomination_value(key)
+                            total += denomination_value * payed[key]
 
                         return payed, total
                 else:
@@ -101,8 +102,6 @@ class VMPaymentProcess:
         if total > price_check:
             payment_completed = self.payment_process(total, payment, price_check)
             return payment_completed
-        elif total == price_check:
-            pass
         else:
             self.refund_customer(total, refund=True)
 
@@ -110,24 +109,37 @@ class VMPaymentProcess:
         """Processes the successful payment, then call refund_customer if needed for the extra cash.
         Also calls update_bank_file, log_purchase and notify_purchase for a successful payment."""
         amount_used = 0
+        total_given = 0
 
         for key, count in payment.items():
             key_value = type(self).get_denomination_value(key)
 
             for _ in range(count):
-                if amount_used + key_value <= price_check:
-                    if key in self.data_bank["coins"]:
-                        self.data_bank["coins"][key] += 1
-                    else:
-                        self.data_bank["bills"][key] += 1
-                    amount_used += key_value
+
+                total_given += key_value
+
+                if amount_used >= price_check:
+                    continue  # Accept money but don't process it (it will be refunded)
+
+                if key in self.data_bank["coins"]:
+                    self.data_bank["coins"][key] += 1
                 else:
-                    if amount_used == total:
-                        return amount_used
-                    else:
-                        money_to_refund = total - amount_used
-                        type(self).refund_customer(money_to_refund)
-                        return True
+                    self.data_bank["bills"][key] += 1
+
+                amount_used += key_value
+
+        if amount_used >= price_check:
+            money_to_refund = round(total_given - price_check, 2)
+            if money_to_refund > 0:
+                type(self).refund_customer(money_to_refund)
+
+            self.update_bank_file()
+            self.update_log_purchase()
+            self.notify_purchase()
+            return True
+        else:
+            type(self).refund_customer(total_given, refund=True)
+            return False
 
     def update_bank_file(self):
         """Updates the json file that keeps track of how much money is inside the  machine"""

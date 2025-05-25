@@ -25,7 +25,11 @@ class VendingMachine:
                 self.vmtext.print_message("payment2", price=product_price)
                 method_of_payment = self.choose_how_to_pay()
                 payed, total = self.vmpayment.payment(method_of_payment)
-                self.vmpayment.check_customer_payment()
+                successful = self.vmpayment.check_customer_payment(total=total, payment=payed, price_check=product_price)
+                if successful:
+                    print(f"Kindly take your {product}")
+                else:
+                    print(f"Payment Failed")
             else:
                 self.vmtext.print_message("alert_2", item=product)
 
