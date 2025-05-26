@@ -29,12 +29,13 @@ Each Project focuses on clean code (Well... mostly! Still refactoring a few spag
 > A modular, object-oriented vending machine simulation built entirely in Python. Designed with clarity, extensibility, and real-world modeling in mind.
 
 ✅ Features:
--🧠 Object-Oriented Architecture – Clean class separation for product pricing, payment processing, session handling, and storage.
--💸 Dynamic Payment System – Accepts coins and bills with denomination mapping, overpayment handling, and change logic.
--📦 Inventory Management – Real-time stock validation, auto-restocking from backup, and JSON-based storage.
--💬 Text-Based User Interface – Category and product selection with robust input validation and CLI prompts.
--🧾 Transaction Logging – Tracks purchases with timestamps for future auditing or display.
--🛠️ Modular Design – Separated core logic, helpers, and persistence layers for maintainability and scalability.
+
+- 🧠 Object-Oriented Architecture – Clean class separation for product pricing, payment processing, session handling, and storage.
+- 💸 Dynamic Payment System – Accepts coins and bills with denomination mapping, overpayment handling, and change logic.
+- 📦 Inventory Management – Real-time stock validation, auto-restocking from backup, and JSON-based storage.
+- 💬 Text-Based User Interface – Category and product selection with robust input validation and CLI prompts.
+- 🧾 Transaction Logging – Tracks purchases with timestamps for future auditing or display.
+- 🛠️ Modular Design – Separated core logic, helpers, and persistence layers for maintainability and scalability.
 
 📂 Folder: 'Vending_Machine'
 📖 [Detailed README](Vending_Machine/README.md) 
