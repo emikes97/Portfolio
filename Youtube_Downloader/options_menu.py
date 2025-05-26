@@ -13,7 +13,7 @@ SAVE_PATH_CONFIG_VIDEO = Helper.get_resource_path("Prefab_Json_Configurations")
 
 class Options:
 
-    def __init__(self, helper, display_options, request_input, reason_to_pass):
+    def __init__(self, helper, display_options, myinput):
         # Configs
         self.audio_config = None
         self.video_config = None
@@ -21,11 +21,10 @@ class Options:
         # Controllers
         self.runner = True
         self.help = helper
+        self.input = myinput
 
         # Lists
         self.display_options = display_options  # ["DISPLAY_OPT", "DISPLAY_MED"]
-        self.request_input = request_input  # ["STRING", "INT"]
-        self.reason_to_pass = reason_to_pass  # ["APP_FUNC", "URL", "AUDIO_FORMAT", "INTEGER"]
 
         # Dictionaries
         self.options_list = {}
@@ -115,7 +114,7 @@ class Options:
 
                 case "Audio Format":
                     self.help.display_to_screen(self.display_options[1], self.media_formats)
-                    audio_format = self.media_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)]
+                    audio_format = self.media_formats[self.input.retrieve_integer(self.media_formats)]
                     for processor in self.audio_config.get("postprocessors", []):
                         if processor.get("key") == "FFmpegExtractAudio":
                             processor["preferredcodec"] = audio_format
@@ -124,7 +123,7 @@ class Options:
 
                 case "Bit Rate":
                     self.help.display_to_screen(self.display_options[1], self.bit_rate)
-                    bit_rate_change = self.bit_rate[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.bit_rate)]
+                    bit_rate_change = self.bit_rate[self.input.retrieve_integer(self.bit_rate)]
                     for processor in self.audio_config.get("postprocessors", []):
                         if processor.get("key") == "FFmpegExtractAudio":
                             processor["preferredquality"] = bit_rate_change
@@ -146,7 +145,7 @@ class Options:
 
                 case "Audio Bit Rate":
                     self.help.display_to_screen(self.display_options[1], self.bit_rate)
-                    audio_format = self.bit_rate[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.bit_rate)]
+                    audio_format = self.bit_rate[self.input.retrieve_integer(self.bit_rate)]
                     for arg in self.video_config.get("postprocessor_args", {}).get("ffmpeg", []):
                         if "-b:a" in arg:
                             index = self.video_config["postprocessor_args"]["ffmpeg"].index("-c:a")
@@ -156,14 +155,14 @@ class Options:
 
                 case "Merge Format":
                     self.help.display_to_screen(self.display_options[1], self.output_formats)
-                    merge_format = self.output_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.media_formats)]
+                    merge_format = self.output_formats[self.input.retrieve_integer(self.output_formats)]
                     self.video_config["merge_output_format"] = merge_format
                     print("Merge Format has been successfully changed")
                     changes_happened = True
 
                 case "Audio Codec":
                     self.help.display_to_screen(self.display_options[1], self.audio_codecs)
-                    aud_codex = self.output_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.audio_codecs)]
+                    aud_codex = self.output_formats[self.input.retrieve_integer(self.audio_codecs)]
                     for arg in self.video_config.get("postprocessor_args", {}).get("ffmpeg", []):
                         if "-c:a" in arg:
                             index = self.video_config["postprocessor_args"]["ffmpeg"].index("-c:a")
@@ -173,7 +172,7 @@ class Options:
 
                 case "Video Codec":
                     self.help.display_to_screen(self.display_options[1], self.video_codecs)
-                    vid_codex = self.output_formats[self.help.retrieve_input(self.request_input[1], self.reason_to_pass[2], self.video_codecs)]
+                    vid_codex = self.output_formats[self.input.retrieve_integer(self.video_codecs)]
                     for arg in self.video_config.get("postprocessor_args", {}).get("ffmpeg", []):
                         if "-c:v" in arg:
                             index = self.video_config["postprocessor_args"]["ffmpeg"].index("-c:v")
@@ -248,7 +247,7 @@ class Options:
 
     def _get_label(self, list_to_pass, helper):
         self.help.display_to_screen(self.display_options[0], list_to_pass)  # Display the Options of the APP
-        choice = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[0],list_to_pass)  # Retrieve the Option
+        choice = self.input.retrieve_string(list_to_pass)
         label = self.help.user_choices(choice, helper)  # Retrieve the label for the function
         return label
 

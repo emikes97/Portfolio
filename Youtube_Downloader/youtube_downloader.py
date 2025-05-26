@@ -2,6 +2,7 @@ from helper import Helper
 from downloader import Downloader
 from pathlib import Path
 from options_menu import Options
+from input_handler import InputHandler as Ihandler
 
 class YtbDownloader:
 
@@ -11,11 +12,10 @@ class YtbDownloader:
 
         # Lists
         self.display_options = ["DISPLAY_OPT", "DISPLAY_MED"] # Display Options
-        self.request_input = ["STRING", "INT"]
-        self.reason_to_pass = ["APP_FUNC", "URL", "AUDIO_FORMAT", "INTEGER"]
 
         # Controllers / Helpers
         self.help = Helper()
+        self.input = Ihandler()
         self.download = Downloader()
         self.app_is_on = True
         self.options = None
@@ -50,7 +50,7 @@ class YtbDownloader:
                     self._queued_download(label)
 
                 case "Options":
-                    self.options = Options(self.help, self.display_options, self.request_input, self.reason_to_pass)
+                    self.options = Options(self.help, self.display_options, self.input)
                     self.options.run_options_menu()
 
                 case "Exit":
@@ -66,10 +66,10 @@ class YtbDownloader:
 
     def _queued_download(self, label):
         queue = []
-        videos_to_download = self.help.retrieve_input(self.request_input[1], self.reason_to_pass[3])
+        videos_to_download = self.input.retrieve_integer()
 
         for i in range(videos_to_download):
-            url = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[1])  # Request the URL if function is for download
+            url = self.input.retrieve_url()
             queue.append(url)
 
         match label:
@@ -90,12 +90,12 @@ class YtbDownloader:
             if entry.get('label') == label:
                 function_to_run = entry.get('action')
                 break
-        url = self.help.retrieve_input(self.request_input[0],self.reason_to_pass[1])  # Request the URL if function is for download
+        url = self.input.retrieve_url()  # Will decouple it from _get_func_to_Call. But not for now.
         return function_to_run, url
 
     def _get_label(self):
         self.help.display_to_screen(self.display_options[0], self.program_choices)  # Display the Options of the APP
-        choice = self.help.retrieve_input(self.request_input[0], self.reason_to_pass[0],self.program_choices)  # Retrieve the Option
+        choice = self.input.retrieve_string(self.program_choices)
         label = self.help.user_choices(choice, self.program_choices)  # Retrieve the label for the function
 
         return label
