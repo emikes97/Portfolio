@@ -37,4 +37,4 @@ Each Project focuses on clean code (Well... mostly! Still refactoring a few spag
 -🛠️ Modular Design – Separated core logic, helpers, and persistence layers for maintainability and scalability.
 
 📂 Folder: 'Vending_Machine'
-
+📖 [Detailed README](Vending_Machine/README.md) 
