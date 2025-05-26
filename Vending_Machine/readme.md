@@ -32,6 +32,7 @@ handling product selection, inventory management, and payment processing, mimick
 
 ## 📁 Project Structure
 
+```
 Vending_Machine/
 ├── data/                         # Core data for items, stock, and pricing
 │   ├── vm_data_item_list.json
@@ -68,7 +69,7 @@ Vending_Machine/
 ├── main.py                      # Entry point
 ├── vending_machine.py          # Main application class
 └── .gitignore
-
+```
 ---
 
 # Example Photos:
