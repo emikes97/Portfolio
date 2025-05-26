@@ -1,6 +1,7 @@
 # Ignore all compiled Python files
 __pycache__/
 *.pyc
+.idea/
 
 # Ignore virtual environment
 venv/
