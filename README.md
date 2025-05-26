@@ -21,16 +21,21 @@ Each Project focuses on clean code (Well... mostly! Still refactoring a few spag
   -Enhance maintainability
 
 📂 Folder: 'Youtube_Downloader'  
-📖 [Detailed README](Youtube_Downloader/README.md) (WIP)
+📖 [Detailed README](Youtube_Downloader/README.md) 
 
 ---
 
-### 🥤 Vending Machine Simulator – ⚙️ Work In Progress
-> A text-based vending machine simulator showcasing OOP principles and CLI interaction.
+### 🥤 Vending Machine Simulator (CLI Edition) ✅ Fully Operational
+> A modular, object-oriented vending machine simulation built entirely in Python. Designed with clarity, extensibility, and real-world modeling in mind.
 
-- Select drinks, manage inventory, and simulate purchases
-- Input validation and internal state handling
-- Object-oriented codebase for easy expansion
-- Future plans: balance tracking, admin mode, and transaction receipts
+✅ Features:
 
-📂 Folder: 'Vending_Machine/'
+- 🧠 Object-Oriented Architecture – Clean class separation for product pricing, payment processing, session handling, and storage.
+- 💸 Dynamic Payment System – Accepts coins and bills with denomination mapping, overpayment handling, and change logic.
+- 📦 Inventory Management – Real-time stock validation, auto-restocking from backup, and JSON-based storage.
+- 💬 Text-Based User Interface – Category and product selection with robust input validation and CLI prompts.
+- 🧾 Transaction Logging – Tracks purchases with timestamps for future auditing or display.
+- 🛠️ Modular Design – Separated core logic, helpers, and persistence layers for maintainability and scalability.
+
+📂 Folder: 'Vending_Machine'
+📖 [Detailed README](Vending_Machine/README.md) 
