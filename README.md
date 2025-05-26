@@ -16,9 +16,9 @@ Each Project focuses on clean code (Well... mostly! Still refactoring a few spag
 - Built with 'yt-dlp', 'ffmpeg', 'Pathlib'.
 - CLI with confirmation prompts, queue handling.
 - **Refactor Goals**: 
-  -Better input manager
-  -Streamline queue logic
-  -Enhance maintainability
+  - Better input manager (Done)
+  - Streamline queue logic
+  - Enhance maintainability
 
 📂 Folder: 'Youtube_Downloader'  
 📖 [Detailed README](Youtube_Downloader/README.md) 
