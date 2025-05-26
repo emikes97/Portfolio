@@ -12,7 +12,6 @@ class VendingMachine:
         self.vending_machine_on = None
         self.vmpayment = VMPaymentManager(self.vmtext)
         self.vending_machine_choices = []
-        self.vmpayment = None
 
     def run(self):
         self.vmtext.print_message("starting_message")
@@ -28,6 +27,7 @@ class VendingMachine:
                 self.vmtext.print_message("payment2", price=product_price)
                 success = self.vmpayment.payment(product_price, product)
                 if success:
+                    self.vmstorage.decrease_stock(category, product)
                     print(f"Take your {product} from the Vending Machine")
                 else:
                     print("Transaction Failed")

@@ -8,7 +8,7 @@ class PaymentSession:
         self.payment_method = payment_method
 
         # Extract type of payment
-        self.payment_type, self.payment_messages = Denominations.get_payment_method(payment_method)
+        self.method_dict, self.payment_messages = Denominations.get_payment_method(payment_method)
 
         # Collect pay
         self.payed = {}
@@ -28,19 +28,19 @@ class PaymentSession:
         while self.runner:
 
             pay = input(self.payment_messages["type"])
-            if pay in self.payment_method:
+            if pay in self.method_dict:
 
-                pay = self.payment_type[pay]
+                pay = self.method_dict[pay]
 
                 try:
                     quantity = int(input(self.payment_messages["quantity"]))
                 except ValueError:
-                    return payed, 0
+                    return self.payed, 0
 
                 if pay not in payed:
-                    payed[pay] = quantity
+                    self.payed[pay] = quantity
                 else:
-                    payed[pay] += quantity
+                    self.payed[pay] += quantity
 
             while True:
                 to_continue = input("Do you wish to continue? Type: 'yes' or 'no'").lower().strip()
@@ -54,6 +54,6 @@ class PaymentSession:
                             denomination_value = Denominations.get_denomination_value(key)
                             total += denomination_value * payed[key]
 
-                        return total, payed
+                        return total, self.payed
                 else:
                     print("⚠️ Invalid input. Please type 'yes' or 'no'.")

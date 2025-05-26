@@ -1,18 +1,18 @@
 {
-  "stock": {
-    "water": 5000,
-    "milk": 5000,
-    "coffee": 2000,
-    "coca cola": 20,
-    "sprite": 20,
-    "red bull": 20,
-    "lays oregano": 20,
-    "lays paprika": 20,
-    "lays salt": 20,
-    "cheetos": 20,
-    "fish sticks": 20,
-    "lacta": 30,
-    "lacta caramel": 30,
-    "lacta strawberry": 30
-  }
+    "stock": {
+        "water": 4970,
+        "milk": 4980,
+        "coffee": 1992,
+        "coca cola": 20,
+        "sprite": 20,
+        "red bull": 20,
+        "lays oregano": 19,
+        "lays paprika": 20,
+        "lays salt": 20,
+        "cheetos": 20,
+        "fish sticks": 20,
+        "lacta": 30,
+        "lacta caramel": 30,
+        "lacta strawberry": 30
+    }
 }

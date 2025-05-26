@@ -26,6 +26,7 @@ class PaymentProcess:
 
         amount_used = 0
         total_given = 0
+        skipped = False
 
         for key, count in self.payed_dict.items():
             key_value = Denominations.get_denomination_value(key)
@@ -33,16 +34,22 @@ class PaymentProcess:
             for _ in range(count):
 
                 total_given += key_value
+                amount_used += key_value
 
-                if amount_used >= self.product_price:
+                if amount_used > self.product_price:
+                    if not skipped:
+                        if key in bank_cash_saved["coins"]:
+                            bank_cash_saved["coins"][key] += 1
+                            skipped = True
+                        else:
+                            bank_cash_saved["bills"][key] += 1
+                            skipped = True
                     continue  # Accept money but don't process it (it will be refunded)
 
                 if key in bank_cash_saved["coins"]:
                     bank_cash_saved["coins"][key] += 1
                 else:
                     bank_cash_saved["bills"][key] += 1
-
-                amount_used += key_value
 
         bank_cash_saved["total-money"] += amount_used
 

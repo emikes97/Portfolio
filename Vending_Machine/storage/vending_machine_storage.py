@@ -90,6 +90,18 @@ class VendingMachineStorage:
             # send an alert to inform that backup storage has dried out for the ingredient
             print("No available backup")
 
+    def decrease_stock(self, category, product):
+
+        if category == "coffee":
+            required_ingredients = self.item_list.get("coffee", {}).get(product,{})
+            for ingredient, amount in required_ingredients.items():
+                self.stock_available["stock"][ingredient] -= amount
+        else:
+            self.stock_available["stock"][product] -= 1
+
+        self.update_storage()
+        return
+
     def return_available_categories(self):
         """A Class method to return all the available choices aka
         1) coffee
