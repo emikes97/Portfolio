@@ -3,7 +3,7 @@
 > “Why buy chips from a real vending machine when you can simulate existential hunger in your terminal?”
 
 
-A modular, object-oriented Vending Machine in-depth Simulator implemented as a command-line interface (CLI) application in Python. The simulator provides an interactive experience, 
+A modular, object-oriented Vending Machine Simulator implemented as a command-line interface (CLI) application in Python. The simulator provides an interactive experience, 
 handling product selection, inventory management, and payment processing, mimicking the behavior of a real-world vending machine.
 
 ---
