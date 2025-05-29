@@ -30,6 +30,7 @@ if not log_file.exists():
 
 logging.basicConfig(
     filename=log_file,
+    filemode= 'a',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -37,6 +38,8 @@ logging.basicConfig(
 for file in download_path.iterdir():
     if file.is_file():
         moved = False
+        if file.name == "organizer_log.txt":
+            continue
         for category, extensions in file_types.items():
             if file.suffix.lower() in extensions:
                 target_folder = download_path / category
