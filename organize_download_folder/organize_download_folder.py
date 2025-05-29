@@ -1,8 +1,6 @@
 import logging
-import os
 import shutil
 from pathlib import Path
-from datetime import datetime
 
 # All file types that the script will scan and move to respective folders.
 file_types = {
