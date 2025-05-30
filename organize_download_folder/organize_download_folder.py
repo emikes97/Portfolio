@@ -1,6 +1,9 @@
 import logging
+import argparse
 import shutil
 from pathlib import Path
+
+download_path = Path.home() / "Downloads" # Initiate the download path
 
 # All file types that the script will scan and move to respective folders.
 file_types = {
@@ -14,9 +17,14 @@ file_types = {
     'Others': []
 }
 
-download_path = Path.home() / "Downloads" # Initiate the download path
+# Command line arguments
+parser = argparse.ArgumentParser(description="Organize files by type.")
+parser.add_argument("--path", type=str, default=download_path, help="Path to folder to organize")
+parser.add_argument("--dry-run", action="store_true", help="Simulate without moving the files")
+args = parser.parse_args()
 
 # Add logging for each moved file.
+target_path = Path(args.path).expanduser().resolve()
 log_file = Path.home() / "Downloads" / "organizer_log.txt"
 
 if not log_file.exists():
@@ -42,14 +50,20 @@ for file in download_path.iterdir():
             if file.suffix.lower() in extensions:
                 target_folder = download_path / category
                 target_folder.mkdir(exist_ok=True)
-                shutil.move(str(file), str(target_folder / file.name))
-                logging.info(f"Moved '{file.name}' -> '{category}/'")
+                if args.dry_run:
+                    print(f"[DRY RUN] Would move '{file.name}' -> '{category}/'")
+                else:
+                    shutil.move(str(file), str(target_folder / file.name))
+                    logging.info(f"Moved '{file.name}' -> '{category}/'")
                 moved = True
                 break
         if not moved:
             other_folder = download_path / "Others"
             other_folder.mkdir(exist_ok=True)
-            shutil.move(str(file), str(other_folder / file.name))
-            logging.info(f"Moved '{file.name}' -> 'Others/")
+            if args.dry_run:
+                print(f"[DRY RUN] Would move '{file.name}' -> 'Others/'")
+            else:
+                shutil.move(str(file), str(other_folder / file.name))
+                logging.info(f"Moved '{file.name}' -> 'Others/")
 
-print("Download folder organized successfully!")
+print("✅ Folder organized." if not args.dry_run else "🧪 Dry run complete. No files were moved.")
